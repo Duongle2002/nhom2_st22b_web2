@@ -7,17 +7,17 @@ public class Member {
     private String phone;
     private String address;
 
-public Member(Long id, String name, String email, String phone, String address) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
-    this.phone = phone;
-    this.address = address;
-}
-public Long getId() {
-    return id;
+    public Member(Long id, String name, String email, String phone, String address) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+    }
+    public Long getId() {
+        return id;
 
-}
+    }
 
     public void setId(Long id) {
         this.id = id;
