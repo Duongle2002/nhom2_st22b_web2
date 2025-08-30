@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Test - Hệ thống Quản lý</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .navbar-nav {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .navbar-nav a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav a:hover {
+            color: #667eea;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .user-role {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .logout-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ee5a24;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 2rem;
+        }
+
+        .message h2 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .message p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .test-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .test-link {
+            display: block;
+            padding: 1rem;
+            background: #f8f9fa;
+            color: #333;
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .test-link:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .test-link.admin {
+            border-color: #dc3545;
+        }
+
+        .test-link.manager {
+            border-color: #fd7e14;
+        }
+
+        .test-link.user {
+            border-color: #28a745;
+        }
+
+        .test-link.public {
+            border-color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">🏢 Hệ thống Quản lý</a>
+            <ul class="navbar-nav">
+                <li><a href="/">🏠 Trang chủ</a></li>
+                <li><a href="/members">👥 Thành viên</a></li>
+                <li><a href="/companies">🏢 Công ty</a></li>
+                <li><a href="/users">👤 Người dùng</a></li>
+                <li><a href="/export/data-sql">📤 Export</a></li>
+            </ul>
+            
+            <!-- User Info and Logout -->
+            <div class="user-section" th:if="${#authentication.authenticated}">
+                <div class="user-info">
+                    <div class="user-name" th:text="${#authentication.principal.username}">User Name</div>
+                    <div class="user-role" th:text="${#authentication.authorities}">User Role</div>
+                </div>
+                <form th:action="@{/logout}" method="post" style="margin: 0;">
+                    <button type="submit" class="logout-btn">🚪 Đăng xuất</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="role-badge" th:text="${role}">ROLE</div>
+        
+        <div class="message">
+            <h2>🎯 Trang Test Quyền Truy Cập</h2>
+            <p th:text="${message}">Message here</p>
+        </div>
+
+        <div class="test-links">
+            <a href="/admin-only" class="test-link admin">
+                <strong>🔒 Admin Only</strong><br>
+                <small>Chỉ ADMIN</small>
+            </a>
+            
+            <a href="/manager-only" class="test-link manager">
+                <strong>👔 Manager+</strong><br>
+                <small>ADMIN + MANAGER</small>
+            </a>
+            
+            <a href="/user-only" class="test-link user">
+                <strong>👤 User+</strong><br>
+                <small>ADMIN + MANAGER + USER</small>
+            </a>
+            
+            <a href="/public" class="test-link public">
+                <strong>🌍 Public</strong><br>
+                <small>Tất cả mọi người</small>
+            </a>
+        </div>
+    </div>
+</body>
+</html> 
