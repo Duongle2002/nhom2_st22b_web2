@@ -13,8 +13,8 @@ public class CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
 
-    public void saveOrUpdate(Company company) {
-        companyRepository.save(company);
+    public Company saveOrUpdate(Company company) {
+        return companyRepository.save(company);
     }
 
     public List<Company> getAllCompanies() {

@@ -1,5 +1,7 @@
 package com.example.nhom2_st22b_web2.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -14,10 +16,12 @@ public class UserDemo {
     private String name;
     @Column(unique = true)
     private String email;
+    @JsonIgnore
     private String password;
 
     @ManyToOne
     @JoinColumn(name = "company_id")
+    @JsonBackReference
     private Company company;
 
     @ManyToMany(fetch = FetchType.EAGER)

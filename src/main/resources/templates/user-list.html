@@ -1,30 +1,46 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>User List</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 </head>
 <body>
-<h2>User List</h2>
-<table border="1">
-    <tr>
+<div class="container">
+  <div class="header">
+    <div>
+      <h1 class="title">Users</h1>
+      <div class="muted">Quản lý người dùng</div>
+    </div>
+    <div class="actions">
+      <a class="btn" th:href="@{/companies}">Companies</a>
+      <a class="btn" th:href="@{/logout}">Logout</a>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
         <th>ID</th>
         <th>Name</th>
         <th>Email</th>
         <th>Company</th>
         <th>Actions</th>
-    </tr>
-    <tr th:each="user : ${users}">
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="user : ${users}">
         <td th:text="${user.id}"></td>
         <td th:text="${user.name}"></td>
         <td th:text="${user.email}"></td>
         <td th:text="${user.company?.name}"></td>
-        <td>
-            <a th:href="@{/users/edit/{id}(id=${user.id})}">Edit</a>
-            <a th:href="@{/users/delete/{id}(id=${user.id})}">Delete</a>
+        <td class="actions">
+          <a class="btn" th:href="@{/users/edit/{id}(id=${user.id})}">Edit</a>
+          <a class="btn btn-danger" th:href="@{/users/delete/{id}(id=${user.id})}">Delete</a>
         </td>
-    </tr>
-</table>
-<p><a th:href="@{/companies}">View Companies</a></p>
-<p><a th:href="@{/logout}">Logout</a></p>
+      </tr>
+    </tbody>
+  </table>
+</div>
 </body>
 </html>

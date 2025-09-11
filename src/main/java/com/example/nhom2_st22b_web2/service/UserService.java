@@ -23,18 +23,63 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void saveOrUpdate(UserDemo user) {
-        if (user.getId() == null && userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists");
+    public UserDemo saveOrUpdate(UserDemo user) {
+        // Create
+        if (user.getId() == null) {
+            if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+                throw new RuntimeException("Email already exists");
+            }
+            String rawPassword = user.getPassword();
+            if (rawPassword == null || rawPassword.isBlank()) {
+                throw new RuntimeException("Password is required");
+            }
+            user.setPassword(ensureEncoded(rawPassword));
+            // Assign default USER role if present and none provided
+            if (user.getRoles() == null || user.getRoles().isEmpty()) {
+                Optional<Role> userRole = roleRepository.findByName("USER");
+                userRole.ifPresent(role -> {
+                    Set<Role> roles = new HashSet<>();
+                    roles.add(role);
+                    user.setRoles(roles);
+                });
+            }
+            return userRepository.save(user);
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Optional<Role> userRole = roleRepository.findByName("USER");
-        if (userRole.isPresent()) {
-            Set<Role> roles = new HashSet<>();
-            roles.add(userRole.get());
-            user.setRoles(roles);
+
+        // Update
+        Optional<UserDemo> existingOpt = userRepository.findById(user.getId());
+        if (existingOpt.isEmpty()) {
+            throw new RuntimeException("User not found");
         }
-        userRepository.save(user);
+        UserDemo existing = existingOpt.get();
+
+        // If email changed, ensure unique
+        if (user.getEmail() != null && !user.getEmail().equals(existing.getEmail())) {
+            Optional<UserDemo> byEmail = userRepository.findByEmail(user.getEmail());
+            if (byEmail.isPresent() && !byEmail.get().getId().equals(existing.getId())) {
+                throw new RuntimeException("Email already exists");
+            }
+            existing.setEmail(user.getEmail());
+        }
+
+        if (user.getName() != null) {
+            existing.setName(user.getName());
+        }
+        if (user.getCompany() != null) {
+            existing.setCompany(user.getCompany());
+        }
+
+        // Password: only update if provided; avoid double-encoding
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            existing.setPassword(ensureEncoded(user.getPassword()));
+        }
+
+        // Roles: keep provided if non-empty, else preserve existing
+        if (user.getRoles() != null && !user.getRoles().isEmpty()) {
+            existing.setRoles(user.getRoles());
+        }
+
+        return userRepository.save(existing);
     }
 
     public List<UserDemo> getAllUsers() {
@@ -52,5 +97,12 @@ public class UserService {
 
     public Optional<UserDemo> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    private String ensureEncoded(String maybeRawPassword) {
+        if (maybeRawPassword.startsWith("$2a$") || maybeRawPassword.startsWith("$2b$") || maybeRawPassword.startsWith("$2y$")) {
+            return maybeRawPassword;
+        }
+        return passwordEncoder.encode(maybeRawPassword);
     }
 }
