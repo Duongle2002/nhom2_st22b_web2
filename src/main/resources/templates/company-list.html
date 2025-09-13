@@ -1,45 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Company List</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <div>
-      <h1 class="title">Companies</h1>
-      <div class="muted">Quản lý công ty</div>
-    </div>
-    <div class="actions">
-      <a class="btn btn-primary" th:href="@{/companies/add}">Add Company</a>
-      <a class="btn" th:href="@{/users}">Users</a>
-      <a class="btn" th:href="@{/logout}">Logout</a>
-    </div>
-  </div>
-  <table>
-    <thead>
-      <tr>
+<h2>Company List</h2>
+<table border="1">
+    <tr>
         <th>ID</th>
         <th>Name</th>
         <th>Address</th>
         <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr th:each="company : ${companies}">
+    </tr>
+    <tr th:each="company : ${companies}">
         <td th:text="${company.id}"></td>
         <td th:text="${company.name}"></td>
         <td th:text="${company.address}"></td>
-        <td class="actions">
-          <a class="btn" th:href="@{/companies/edit/{id}(id=${company.id})}">Edit</a>
-          <a class="btn btn-danger" th:href="@{/companies/delete/{id}(id=${company.id})}">Delete</a>
+        <td>
+            <a th:href="@{/companies/edit/{id}(id=${company.id})}">Edit</a>
+            <a th:href="@{/companies/delete/{id}(id=${company.id})}">Delete</a>
         </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+    </tr>
+</table>
+<p><a th:href="@{/companies/add}">Add Company</a></p>
+<p><a th:href="@{/users}">View Users</a></p>
+<p><a th:href="@{/logout}">Logout</a></p>
 </body>
 </html>

@@ -1,42 +1,32 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Register</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <h1 class="title">Register</h1>
-    <div class="actions">
-      <a class="btn" th:href="@{/login}">Login</a>
+<h2>Register</h2>
+<form th:action="@{/register}" th:object="${user}" method="post">
+    <div>
+        <label>Name:</label>
+        <input type="text" th:field="*{name}"/>
     </div>
-  </div>
-  <form th:action="@{/register}" th:object="${user}" method="post">
-    <div class="field">
-      <label>Name</label>
-      <input type="text" th:field="*{name}"/>
+    <div>
+        <label>Email:</label>
+        <input type="text" th:field="*{email}"/>
     </div>
-    <div class="field">
-      <label>Email</label>
-      <input type="text" th:field="*{email}"/>
+    <div>
+        <label>Password:</label>
+        <input type="password" th:field="*{password}"/>
     </div>
-    <div class="field">
-      <label>Password</label>
-      <input type="password" th:field="*{password}"/>
+    <div>
+        <label>Company:</label>
+        <select th:field="*{company.id}">
+            <option th:each="company : ${companies}" th:value="${company.id}" th:text="${company.name}"></option>
+        </select>
     </div>
-    <div class="field">
-      <label>Company</label>
-      <select th:field="*{company.id}">
-        <option th:each="company : ${companies}" th:value="${company.id}" th:text="${company.name}"></option>
-      </select>
+    <div>
+        <input type="submit" value="Register"/>
     </div>
-    <div class="actions">
-      <input class="btn btn-primary" type="submit" value="Register"/>
-    </div>
-  </form>
-</div>
+</form>
 </body>
 </html>

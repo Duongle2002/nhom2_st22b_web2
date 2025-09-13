@@ -7,7 +7,6 @@ import com.example.nhom2_st22b_web2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,37 +39,14 @@ public class WebController {
     }
 
     @GetMapping("/users")
-    public String listUsers(Model model, Authentication auth) {
-        boolean isAdmin = auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"));
-        if (isAdmin) {
-            model.addAttribute("users", userService.getAllUsers());
-            return "user-list";
-        }
-        // user thường: chuyển sang trang profile cá nhân
-        if (auth != null) {
-            return "redirect:/users/profile";
-        }
-        return "redirect:/login";
-    }
-    @GetMapping("/users/profile")
-    public String myProfile(Model model, Authentication auth) {
-        if (auth == null) return "redirect:/login";
-        return userService.findByEmail(auth.getName())
-                .map(u -> {
-                    u.setPassword("");
-                    model.addAttribute("user", u);
-                    model.addAttribute("companies", companyService.getAllCompanies());
-                    return "edit-user";
-                })
-                .orElse("redirect:/login");
+    public String listUsers(Model model) {
+        model.addAttribute("users", userService.getAllUsers());
+        return "user-list";
     }
 
     @GetMapping("/users/edit/{id}")
     public String showEditUserForm(@PathVariable Integer id, Model model) {
         UserDemo user = userService.findById(id);
-        if (user != null) {
-            user.setPassword("");
-        }
         model.addAttribute("user", user);
         model.addAttribute("companies", companyService.getAllCompanies());
         return "edit-user";

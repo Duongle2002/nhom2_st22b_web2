@@ -1,44 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Edit User</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <h1 class="title">Edit User</h1>
-    <div class="actions">
-      <a class="btn" th:href="@{/users}">Back</a>
-    </div>
-  </div>
-  <form th:action="@{/users/edit}" th:object="${user}" method="post">
+<h2>Edit User</h2>
+<form th:action="@{/users/edit}" th:object="${user}" method="post">
     <input type="hidden" th:field="*{id}"/>
-    <div class="field">
-      <label>Name</label>
-      <input type="text" th:field="*{name}"/>
+    <div>
+        <label>Name:</label>
+        <input type="text" th:field="*{name}"/>
     </div>
-    <div class="field">
-      <label>Email</label>
-      <input type="text" th:field="*{email}"/>
+    <div>
+        <label>Email:</label>
+        <input type="text" th:field="*{email}"/>
     </div>
-    <div class="field">
-      <label>Password (để trống nếu không đổi)</label>
-      <input type="password" th:field="*{password}" autocomplete="new-password"/>
+    <div>
+        <label>Password:</label>
+        <input type="password" th:field="*{password}"/>
     </div>
-    <div class="field">
-      <label>Company</label>
-      <select th:field="*{company.id}">
-        <option th:each="company : ${companies}" th:value="${company.id}" th:text="${company.name}"></option>
-      </select>
+    <div>
+        <label>Company:</label>
+        <select th:field="*{company.id}">
+            <option th:each="company : ${companies}" th:value="${company.id}" th:text="${company.name}"></option>
+        </select>
     </div>
-    <div class="actions">
-      <input class="btn btn-primary" type="submit" value="Update"/>
-      <a class="btn" th:href="@{/logout}">Logout</a>
+    <div>
+        <input type="submit" value="Update"/>
     </div>
-  </form>
-</div>
+</form>
 </body>
 </html>

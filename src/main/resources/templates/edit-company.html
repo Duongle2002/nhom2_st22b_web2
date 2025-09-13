@@ -1,34 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Edit Company</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <h1 class="title">Edit Company</h1>
-    <div class="actions">
-      <a class="btn" th:href="@{/companies}">Back</a>
-    </div>
-  </div>
-  <form th:action="@{/companies/edit}" th:object="${company}" method="post">
+<h2>Edit Company</h2>
+<form th:action="@{/companies/edit}" th:object="${company}" method="post">
     <input type="hidden" th:field="*{id}"/>
-    <div class="field">
-      <label>Name</label>
-      <input type="text" th:field="*{name}"/>
+    <div>
+        <label>Name:</label>
+        <input type="text" th:field="*{name}"/>
     </div>
-    <div class="field">
-      <label>Address</label>
-      <input type="text" th:field="*{address}"/>
+    <div>
+        <label>Address:</label>
+        <input type="text" th:field="*{address}"/>
     </div>
-    <div class="actions">
-      <input class="btn btn-primary" type="submit" value="Update"/>
-      <a class="btn" th:href="@{/logout}">Logout</a>
+    <div>
+        <input type="submit" value="Update"/>
     </div>
-  </form>
-</div>
+</form>
 </body>
 </html>
