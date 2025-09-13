@@ -1,5 +1,6 @@
 package com.example.nhom2_st22b_web2.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class Company {
     private String address;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<UserDemo> users = new ArrayList<>();
 
     // Getters and Setters

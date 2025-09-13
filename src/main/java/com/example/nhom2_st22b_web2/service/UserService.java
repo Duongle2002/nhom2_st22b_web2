@@ -23,7 +23,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void saveOrUpdate(UserDemo user) {
+    public UserDemo saveOrUpdate(UserDemo user) {
         if (user.getId() == null && userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists");
         }
@@ -35,6 +35,7 @@ public class UserService {
             user.setRoles(roles);
         }
         userRepository.save(user);
+        return user;
     }
 
     public List<UserDemo> getAllUsers() {
